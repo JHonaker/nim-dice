@@ -18,8 +18,9 @@ proc d(N: int): Die =
   #   etc.
   toSeq(1..N)
 
-# Some common polyhedral dice used in RPGs
 let
+  # Some common polyhedral dice used in RPGs
+  d2* = d(2)
   d4* = d(4)
   d6* = d(6)
   d8* = d(8)
@@ -28,6 +29,13 @@ let
   d20* = d(20)
   d100* = d(100)
   dPercent* = d10.map do (x: int) -> int : (x - 1) * 10
+  # Some other types of dice
+  dFudge: Die = @[-1, 0, 1]
+  # Set of non-transitive dice     On average:
+  ntA: Die = @[2, 2, 4, 4, 9, 9] #   A beats B
+  ntB: Die = @[1, 1, 6, 6, 8, 8] #   B beats C
+  ntC: Die = @[3, 3, 5, 5, 7, 7] #   C beats A
+
 
 proc roll(die: Die): int =
   random(die)

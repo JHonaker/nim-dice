@@ -3,6 +3,10 @@ import sequtils
 import math
 import algorithm
 
+template until(condition, body: untyped) =
+  while condition == false:
+    body
+
 type
   Die = seq[int]
 
@@ -51,9 +55,22 @@ proc keepLowest(rolls: seq[int], N: int): seq[int] =
   else:
     result = rolls
 
+proc rollUntil(die: Die, predicate: proc (roll: int): bool): seq[int] =
+  var rollnum = 0
+  result = @[]
+  result.add(die.roll)
+  until(predicate(result[rollnum])):
+    rollnum += 1
+    result.add(die.roll)
+
+proc explode(die: Die): seq[int] =
+  rollUntil(die, proc(x: int): bool = x != die.max)
 
 if isMainModule:
   echo dPercent.roll
   echo d20.roll(10).keepHighest(4)
   echo d20.roll(11).keepLowest(5)
   echo roll(d20, 3)
+  echo rollUntil(d20, proc (x: int): bool = x == 20)
+  echo rollUntil(d2, proc (x: int): bool = x == 2)
+  echo d2.explode
